@@ -1,0 +1,25 @@
+{
+  "name": "todo-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:css\" \"npm run dev:serve\"",
+    "dev:css": "tailwindcss -c tailwind.config.js -i ./src/styles/tailwind.css -o ./static/css/output.css --watch",
+    "dev:serve": "trunk serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brancobruyneel/todo-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brancobruyneel/todo-example/issues"
+  },
+  "homepage": "https://github.com/brancobruyneel/todo-example#readme",
+  "devDependencies": {
+    "concurrently": "^7.1.0",
+    "tailwindcss": "^3.0.24"
+  }
+}
