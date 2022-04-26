@@ -1,32 +1,7 @@
 use yew::prelude::*;
 
-#[derive(Clone, PartialEq)]
-struct Task {
-    id: usize,
-    title: String,
-    completed: bool,
-}
-
-#[derive(Properties, PartialEq)]
-struct TaskListProps {
-    tasks: Vec<Task>,
-}
-
-#[function_component]
-fn TaskList(TaskListProps { tasks }: &TaskListProps) -> Html {
-    tasks
-        .iter()
-        .map(|task| {
-            let task_id = format!("task-{}", task.id);
-            html! {
-                <div class="flex gap-2 justify-center items-center">
-                    <input type="checkbox" id={task_id.clone()} checked={task.completed} />
-                    <label for={task_id.clone()}>{task.title.clone()}</label>
-                </div>
-            }
-        })
-        .collect()
-}
+use crate::components::task_list::Task;
+use crate::components::task_list::TaskList;
 
 #[function_component]
 pub fn App() -> Html {
