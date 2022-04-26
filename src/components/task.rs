@@ -1,6 +1,7 @@
+use serde::Deserialize;
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq)]
+#[derive(Properties, PartialEq, Deserialize)]
 pub struct TaskProps {
     pub id: usize,
     pub title: String,

@@ -1,21 +1,38 @@
+use reqwasm::http::Request;
 use yew::prelude::*;
 
-use crate::components::task::Task;
+use crate::components::task::{Task, TaskProps};
 use crate::components::task_list::TaskList;
 
 #[function_component]
 pub fn App() -> Html {
-    let tasks = vec![
-        html! { <Task id={1} title={"Take dog out for a walk"} completed={true} /> },
-        html! { <Task id={2} title={"Feed the cats"} completed={false} /> },
-        html! { <Task id={3} title={"Water the plants"} completed={false} /> },
-    ];
+    let tasks = use_state(std::vec::Vec::new);
+
+    {
+        let tasks = tasks.clone();
+        use_effect_with_deps(move |_| {
+            wasm_bindgen_futures::spawn_local(async move {
+                let fetched_tasks: Vec<TaskProps> = Request::get("https://jsonplaceholder.typicode.com/todos")
+                    .send()
+                    .await
+                    .unwrap()
+                    .json()
+                    .await
+                    .unwrap();
+                tasks.set(fetched_tasks.iter().take(10).map(|props| {
+                    html! { <Task id={props.id} title={props.title.clone()} completed={props.completed} /> }
+                }).collect()
+                );
+            });
+            || ()
+        }, ());
+    }
 
     html! {
         <main class="mx-auto w-96">
             <h1 class="font-bold text-4xl text-center my-8">{ "My todo list" }</h1>
             <TaskList>
-                {tasks}
+                {(*tasks).clone()}
             </TaskList>
         </main>
     }
