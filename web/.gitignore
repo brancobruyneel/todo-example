@@ -1,10 +1,6 @@
-# Rust
-/target
-/dist
-/Cargo.lock
-
 # Node
 /node_modules
+/dist
 
-# tailwind
+# Tailwind
 /static/css/output.css
