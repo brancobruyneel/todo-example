@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate diesel;
 
+use actix_cors::Cors;
+use actix_web::http::header;
 use actix_web::{middleware, web, App, HttpServer};
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
@@ -32,7 +34,15 @@ async fn main() -> std::io::Result<()> {
     // Start HTTP server
     HttpServer::new(move || {
         App::new()
-            // set up DB pool to be used with web::Data<Pool> extractor
+            .wrap(
+                Cors::default()
+                    .allowed_origin("http://localhost:8080")
+                    .allowed_methods(vec!["GET", "POST"])
+                    .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT])
+                    .allowed_header(header::CONTENT_TYPE)
+                    .supports_credentials()
+                    .max_age(3600),
+            )
             .app_data(web::Data::new(pool.clone()))
             .wrap(middleware::Logger::default())
             .service(get_tasks)
