@@ -1,6 +1,6 @@
 table! {
     tasks (id) {
-        id -> Binary,
+        id -> Text,
         title -> Text,
         completed -> Integer,
     }
