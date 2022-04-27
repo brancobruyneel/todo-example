@@ -1,9 +1,9 @@
 use serde::Deserialize;
 use yew::prelude::*;
 
-#[derive(Properties, PartialEq, Deserialize)]
+#[derive(Properties, Debug, PartialEq, Deserialize)]
 pub struct TaskProps {
-    pub id: usize,
+    pub id: String,
     pub title: String,
     pub completed: bool,
 }
@@ -11,8 +11,6 @@ pub struct TaskProps {
 #[function_component]
 pub fn Task(props: &TaskProps) -> Html {
     let completed = use_state(|| props.completed);
-
-    let task_id = format!("task-{}", props.id);
 
     let onclick = {
         let completed = completed.clone();
@@ -39,12 +37,12 @@ pub fn Task(props: &TaskProps) -> Html {
             <input
                 {onclick}
                 type="checkbox"
-                id={task_id.clone()}
+                id={props.id.clone()}
                 checked={*completed}
             />
             <label
                 class={classes!(completed_class)}
-                for={task_id.clone()}>{props.title.clone()}
+                for={props.id.clone()}>{props.title.clone()}
             </label>
         </div>
     }

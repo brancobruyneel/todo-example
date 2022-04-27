@@ -1,8 +1,9 @@
-use reqwasm::http::Request;
+use gloo::net::http::{Request, Response};
 use yew::prelude::*;
 
 use crate::components::task::{Task, TaskProps};
 use crate::components::task_list::TaskList;
+
 
 #[function_component]
 pub fn App() -> Html {
@@ -12,15 +13,16 @@ pub fn App() -> Html {
         let tasks = tasks.clone();
         use_effect_with_deps(move |_| {
             wasm_bindgen_futures::spawn_local(async move {
-                let fetched_tasks: Vec<TaskProps> = Request::get("task")
+                let fetched_tasks: Vec<TaskProps> = Request::get("http://localhost:5000/api/task")
                     .send()
                     .await
                     .unwrap()
                     .json()
                     .await
                     .unwrap();
+
                 tasks.set(fetched_tasks.iter().take(10).map(|props| {
-                    html! { <Task id={props.id} title={props.title.clone()} completed={props.completed} /> }
+                    html! { <Task id={props.id.clone()} title={props.title.clone()} completed={props.completed} /> }
                 }).collect()
                 );
             });
@@ -32,7 +34,7 @@ pub fn App() -> Html {
         <main class="mx-auto w-96">
             <h1 class="font-bold text-4xl text-center my-8">{ "My todo list" }</h1>
             <TaskList>
-                {(*tasks).clone()}
+                { (*tasks).clone() }
             </TaskList>
         </main>
     }
