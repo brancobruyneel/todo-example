@@ -13,7 +13,7 @@ pub fn App() -> Html {
         let tasks = tasks.clone();
         use_effect_with_deps(move |_| {
             wasm_bindgen_futures::spawn_local(async move {
-                let fetched_tasks: Vec<TaskProps> = Request::get("http://localhost:5000/api/task")
+                let fetched_tasks: Vec<TaskProps> = Request::get("/api/task")
                     .send()
                     .await
                     .unwrap()

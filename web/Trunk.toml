@@ -5,6 +5,5 @@ dist = "./dist"
 [watch]
 watch = ["./src/", "./static/"]
 
-# [[proxy]]
-# rewrite = "/api/"
-# backend = "http://localhost:5000/"
+[[proxy]]
+backend = "http://localhost:5000/api"
