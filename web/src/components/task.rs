@@ -33,7 +33,7 @@ pub fn Task(props: &TaskProps) -> Html {
     };
 
     html! {
-        <div class="flex gap-2 justify-left items-center">
+        <li class="flex gap-2 justify-left items-center">
             <input
                 {onclick}
                 type="checkbox"
@@ -44,6 +44,6 @@ pub fn Task(props: &TaskProps) -> Html {
                 class={classes!(completed_class)}
                 for={props.id.clone()}>{props.title.clone()}
             </label>
-        </div>
+        </li>
     }
 }
