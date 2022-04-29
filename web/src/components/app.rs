@@ -1,4 +1,4 @@
-use gloo::net::http::{Request, Response};
+use gloo::net::http::Request;
 use yew::prelude::*;
 
 use crate::components::task::{Task, TaskProps};
