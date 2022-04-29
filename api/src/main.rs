@@ -21,6 +21,12 @@ async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
+    let server_port = if let Ok(port) = std::env::var("PORT") {
+        port.parse::<u16>().expect("Could not convert PORT env to string!")
+    } else {
+        5000
+    };
+
     // set up database connection pool
     let conn_spec = std::env::var("DATABASE_URL").expect("DATABASE_URL");
     let manager = ConnectionManager::<SqliteConnection>::new(conn_spec);
@@ -29,7 +35,7 @@ async fn main() -> std::io::Result<()> {
         .expect("Failed to create pool.");
 
 
-    log::info!("starting HTTP server at http://localhost:5000");
+    log::info!("{}", format!("starting HTTP server at http://localhost:{server_port}"));
 
     // Start HTTP server
     HttpServer::new(move || {
@@ -48,7 +54,7 @@ async fn main() -> std::io::Result<()> {
             .service(get_tasks)
             .service(add_task)
     })
-    .bind(("127.0.0.1", 5000))?
+    .bind(("127.0.0.1", server_port))?
     .run()
     .await
 }
