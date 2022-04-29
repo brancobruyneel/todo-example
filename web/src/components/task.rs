@@ -9,23 +9,29 @@ pub struct TaskProps {
 }
 
 #[function_component]
-pub fn Task(props: &TaskProps) -> Html {
-    let completed = use_state(|| props.completed);
+pub fn Task(
+    TaskProps {
+        id,
+        title,
+        completed,
+    }: &TaskProps,
+) -> Html {
+    let completed_state = use_state(|| *completed);
 
     let onclick = {
-        let completed = completed.clone();
+        let completed_state = completed_state.clone();
 
         Callback::from(move |_| {
-            if *completed {
-                completed.set(false);
+            if *completed_state {
+                completed_state.set(false);
             } else {
-                completed.set(true);
+                completed_state.set(true);
             }
         })
     };
 
     let completed_class = {
-        if *completed {
+        if *completed_state {
             "line-through"
         } else {
             ""
@@ -37,12 +43,12 @@ pub fn Task(props: &TaskProps) -> Html {
             <input
                 {onclick}
                 type="checkbox"
-                id={props.id.clone()}
-                checked={*completed}
+                id={id.clone()}
+                checked={*completed_state}
             />
             <label
                 class={classes!(completed_class)}
-                for={props.id.clone()}>{props.title.clone()}
+                for={id.clone()}>{title.clone()}
             </label>
         </li>
     }
