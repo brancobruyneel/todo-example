@@ -34,5 +34,5 @@ async fn add_task(
     .await?
     .map_err(actix_web::error::ErrorInternalServerError)?;
 
-    Ok(HttpResponse::Ok().json(task))
+    Ok(HttpResponse::Created().json(task))
 }
