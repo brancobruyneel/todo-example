@@ -18,13 +18,13 @@ pub fn list_all_tasks(conn: &SqliteConnection) -> Result<Option<Vec<TaskView>>, 
     }
 }
 
-pub fn insert_new_task(t: &str, c: bool, conn: &SqliteConnection) -> Result<TaskView, DbError> {
+pub fn insert_new_task(t: &str, conn: &SqliteConnection) -> Result<TaskView, DbError> {
     use crate::schema::tasks::dsl::*;
 
     let new_task = Task {
         id: Uuid::new_v4().to_string(),
         title: t.to_owned(),
-        completed: c as i32,
+        completed: 0,
     };
 
     let result = diesel::insert_into(tasks).values(&new_task).execute(conn);
@@ -33,7 +33,7 @@ pub fn insert_new_task(t: &str, c: bool, conn: &SqliteConnection) -> Result<Task
         Ok(_) => Ok(TaskView {
             id: new_task.id,
             title: new_task.title,
-            completed: new_task.completed != 0,
+            completed: false,
         }),
         Err(_) => panic!("Something went wrong with the database!"),
     }

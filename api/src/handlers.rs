@@ -29,7 +29,7 @@ async fn add_task(
 ) -> Result<HttpResponse, Error> {
     let task = web::block(move || {
         let conn = pool.get()?;
-        db::insert_new_task(&form.title, form.completed, &conn)
+        db::insert_new_task(&form.title, &conn)
     })
     .await?
     .map_err(actix_web::error::ErrorInternalServerError)?;

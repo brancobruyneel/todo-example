@@ -22,7 +22,6 @@ impl From<Task> for TaskView {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NewTask {
     pub title: String,
-    pub completed: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
