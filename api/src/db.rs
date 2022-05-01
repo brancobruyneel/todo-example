@@ -14,7 +14,7 @@ pub fn list_all_tasks(conn: &SqliteConnection) -> Result<Option<Vec<TaskView>>, 
         let all_views: Vec<TaskView> = all.into_iter().map(|task| task.into()).collect();
         Ok(Some(all_views))
     } else {
-        panic!("Something went wrong with the database!");
+        Err("Something went wrong!".into())
     }
 }
 
@@ -35,6 +35,6 @@ pub fn insert_new_task(t: &str, conn: &SqliteConnection) -> Result<TaskView, DbE
             title: new_task.title,
             completed: false,
         }),
-        Err(_) => panic!("Something went wrong with the database!"),
+        Err(_) => Err("Something went wrong!".into()),
     }
 }
