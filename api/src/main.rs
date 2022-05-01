@@ -19,6 +19,7 @@ type DbPool = r2d2::Pool<ConnectionManager<SqliteConnection>>;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::dotenv().ok();
+
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     let server_port = if let Ok(port) = std::env::var("PORT") {
@@ -51,9 +52,12 @@ async fn main() -> std::io::Result<()> {
             )
             .app_data(web::Data::new(pool.clone()))
             .wrap(middleware::Logger::default())
-            .service(get_tasks)
-            .service(add_task)
-    })
+            .service(
+                web::scope("/api")
+                .service(get_tasks)
+                .service(add_task)
+            )
+        })
     .bind(("127.0.0.1", server_port))?
     .run()
     .await

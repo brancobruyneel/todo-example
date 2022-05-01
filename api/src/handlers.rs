@@ -3,7 +3,7 @@ use actix_web::{web, get, post, HttpResponse, Error};
 use crate::{DbPool, db, models};
 
 
-#[get("/api/task")]
+#[get("/task")]
 async fn get_tasks(
     pool: web::Data<DbPool>,
 ) -> Result<HttpResponse, Error> {
@@ -22,7 +22,7 @@ async fn get_tasks(
     }
 }
 
-#[post("/api/task")]
+#[post("/task")]
 async fn add_task(
     pool: web::Data<DbPool>,
     form: web::Json<models::NewTask>,
