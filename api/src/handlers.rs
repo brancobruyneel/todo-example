@@ -25,7 +25,7 @@ async fn get_tasks(
 #[post("/task")]
 async fn add_task(
     pool: web::Data<DbPool>,
-    form: web::Json<models::NewTask>,
+    form: web::Json<models::InputTask>,
 ) -> Result<HttpResponse, Error> {
     let task = web::block(move || {
         let conn = pool.get()?;

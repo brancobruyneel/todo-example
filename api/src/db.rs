@@ -1,40 +1,26 @@
 use diesel::prelude::*;
 use uuid::Uuid;
 
-use crate::models::{Task, TaskView};
+use crate::models::Task;
 
 type DbError = Box<dyn std::error::Error + Send + Sync>;
 
-pub fn list_all_tasks(conn: &SqliteConnection) -> Result<Option<Vec<TaskView>>, DbError> {
+pub fn list_all_tasks(conn: &SqliteConnection) -> Result<Option<Vec<Task>>, DbError> {
     use crate::schema::tasks::dsl::*;
 
-    let all_tasks = tasks.load::<Task>(conn).optional()?;
-
-    if let Some(all) = all_tasks {
-        let all_views: Vec<TaskView> = all.into_iter().map(|task| task.into()).collect();
-        Ok(Some(all_views))
-    } else {
-        Err("Something went wrong!".into())
-    }
+    Ok(tasks.load::<Task>(conn).optional()?)
 }
 
-pub fn insert_new_task(t: &str, conn: &SqliteConnection) -> Result<TaskView, DbError> {
+pub fn insert_new_task(t: &str, conn: &SqliteConnection) -> Result<Task, DbError> {
     use crate::schema::tasks::dsl::*;
 
     let new_task = Task {
         id: Uuid::new_v4().to_string(),
         title: t.to_owned(),
-        completed: 0,
+        completed: false,
     };
 
-    let result = diesel::insert_into(tasks).values(&new_task).execute(conn);
+    diesel::insert_into(tasks).values(&new_task).execute(conn)?;
 
-    match result {
-        Ok(_) => Ok(TaskView {
-            id: new_task.id,
-            title: new_task.title,
-            completed: false,
-        }),
-        Err(_) => Err("Something went wrong!".into()),
-    }
+    Ok(new_task)
 }
